@@ -1,5 +1,8 @@
 package com.example.sodacloudsmsexampleclient;
 
+import org.magnum.soda.example.sms.SMSManager;
+import org.magnum.soda.example.sms.SMSManagerImpl;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +33,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Instantiate the Module instance
+        configuration_ = new ModuleImpl<ObjRefExtractor>();
+        // configure the instance to return proper values.
+        configuration_.setComponent(SMSManager.class, new SMSManagerImpl(
+                getApplicationContext()));
+        configuration_.setComponent(ObjRefExtractor.class,
+                new QRCodeObjRefExtractor());
 
         connect_ = (Button) findViewById(R.id.connect);
         scan_ = (Button) findViewById(R.id.scan);
