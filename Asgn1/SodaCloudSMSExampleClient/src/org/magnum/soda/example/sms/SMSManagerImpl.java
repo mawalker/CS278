@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.magnum.soda.example.sms.SMSEvent.EVENT_TYPE;
+import org.magnum.soda.proxy.SodaAsync;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,7 +21,7 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-public class SMSManagerImpl implements SMSManager {
+public class SMSManagerImpl implements SMSManager, SMSSender {
 
     private static final String LOG_TAG = SMSManagerImpl.class.getSimpleName();
 
@@ -121,4 +122,15 @@ public class SMSManagerImpl implements SMSManager {
         mgr.sendTextMessage(sms.getTo(), null, sms.getContent(), null, null);
     }
 
+    @SodaAsync
+    @Override
+    public void send(String to, String msg) {
+        // make a new SMS object
+        SMS sms = new SMS();
+        // assign values
+        sms.setTo(to);
+        sms.setContent(msg);
+        // send sms
+        sendSMS(sms);
+    }
 }
