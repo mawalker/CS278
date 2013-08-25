@@ -64,11 +64,11 @@ public class SMSManagerImpl implements SMSManager, SMSSender {
                         newMessage.setFrom(msg.getOriginatingAddress());
                         newMessage.setTo(new String(msg.getUserData()));
                         Log.d(LOG_TAG, "NEW SMS DATA  >>START<<");
-                        Log.d(LOG_TAG,
+                        Log.v(LOG_TAG,
                                 "Message Body: " + newMessage.getContent());
-                        Log.d(LOG_TAG, "Message TO: " + newMessage.getTo());
-                        Log.d(LOG_TAG, "Message FROM: " + newMessage.getFrom());
-                        Log.d(LOG_TAG, "NEW SMS DATA   >>END<<");
+                        Log.v(LOG_TAG, "Message TO: " + newMessage.getTo());
+                        Log.v(LOG_TAG, "Message FROM: " + newMessage.getFrom());
+                        Log.v(LOG_TAG, "NEW SMS DATA   >>END<<");
 
                         received(newMessage);
                     }
@@ -130,6 +130,12 @@ public class SMSManagerImpl implements SMSManager, SMSSender {
         // assign values
         sms.setTo(to);
         sms.setContent(msg);
+
+        Log.d(LOG_TAG, "SENDING SMS   >>START<<");
+        Log.v(LOG_TAG, "Message Body: " + msg);
+        Log.v(LOG_TAG, "Message TO: " + to);
+        Log.v(LOG_TAG, "SENDING SMS    >>END<<");
+
         // send sms
         sendSMS(sms);
     }

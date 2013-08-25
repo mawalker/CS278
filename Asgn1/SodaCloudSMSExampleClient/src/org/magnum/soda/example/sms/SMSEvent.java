@@ -11,42 +11,42 @@ import org.magnum.soda.proxy.SodaByValue;
 @SodaByValue
 public class SMSEvent {
 
-	public enum EVENT_TYPE {
-		SEND, RECEIVE
-	}
+    public enum EVENT_TYPE {
+        SEND, RECEIVE
+    }
 
-	private EVENT_TYPE eventType_;
+    private EVENT_TYPE eventType_;
 
-	private SMS sms_;
+    private SMS sms_;
 
-	public SMSEvent() {
-	}
+    public SMSEvent() {
+    }
 
-	public SMSEvent(EVENT_TYPE eventType) {
-		super();
-		eventType_ = eventType;
-	}
+    public SMSEvent(EVENT_TYPE eventType) {
+        super();
+        eventType_ = eventType;
+    }
 
-	public SMSEvent(EVENT_TYPE eventType, SMS sms) {
-		super();
-		eventType_ = eventType;
-		sms_ = sms;
-	}
+    public SMSEvent(EVENT_TYPE eventType, SMS sms) {
+        super();
+        eventType_ = eventType;
+        sms_ = sms;
+    }
 
-	public EVENT_TYPE getEventType() {
-		return eventType_;
-	}
+    public EVENT_TYPE getEventType() {
+        return eventType_;
+    }
 
-	public void setEventType(EVENT_TYPE eventType) {
-		eventType_ = eventType;
-	}
+    public void setEventType(EVENT_TYPE eventType) {
+        eventType_ = eventType;
+    }
 
-	public SMS getSms() {
-		return sms_;
-	}
+    public SMS getSms() {
+        return sms_;
+    }
 
-	public void setSms(SMS sms) {
-		sms_ = sms;
-	}
+    public void setSms(SMS sms) {
+        sms_ = sms;
+    }
 
 }
