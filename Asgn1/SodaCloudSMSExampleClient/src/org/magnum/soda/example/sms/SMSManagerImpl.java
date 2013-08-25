@@ -9,6 +9,8 @@ package org.magnum.soda.example.sms;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.magnum.soda.example.sms.SMSEvent.EVENT_TYPE;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -66,7 +68,7 @@ public class SMSManagerImpl implements SMSManager {
                         Log.d(LOG_TAG, "Message TO: " + newMessage.getTo());
                         Log.d(LOG_TAG, "Message FROM: " + newMessage.getFrom());
                         Log.d(LOG_TAG, "NEW SMS DATA   >>END<<");
-                        
+
                         received(newMessage);
                     }
                 }
@@ -82,18 +84,29 @@ public class SMSManagerImpl implements SMSManager {
      * after adding a listener to your list.
      */
 
+    ArrayList<SMSListener> listeners = new ArrayList<SMSListener>();
+
     @Override
     public void addListener(SMSListener l) {
-
+        listeners.add(l);
     }
 
     @Override
     public void removeListener(SMSListener l) {
-
+        listeners.remove(l);
     }
 
     public void received(SMS sms) {
-
+        // get new SMS event
+        SMSEvent newEvent = new SMSEvent();
+        // set relevant data
+        newEvent.setSms(sms);
+        newEvent.setEventType(EVENT_TYPE.RECEIVE);
+        // notify each listener currently attached
+        for (SMSListener listener : listeners) {
+            // notify listener
+            listener.smsEvent(newEvent);
+        }
     }
 
     /**
