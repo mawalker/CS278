@@ -16,7 +16,13 @@ public class QRCodeObjRefExtractor implements ObjRefExtractor {
          * 
          */
 
-        return null;
+        // create instance
+        ExternalObjRefImpl externalObjRefImpl = new ExternalObjRefImpl();
+        // set data
+        externalObjRefImpl.setObjRef(oref);
+        externalObjRefImpl.setPubSubHost(server);
+        // return instance
+        return externalObjRefImpl;
     }
 
 }
