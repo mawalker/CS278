@@ -17,7 +17,7 @@ public class QRCodeObjRefExtractor implements ObjRefExtractor {
          */
 
         // create instance
-        ExternalObjRefImpl externalObjRefImpl = new ExternalObjRefImpl();
+        ExternalObjRef externalObjRefImpl = new ExternalObjRefImpl();
         // set data
         externalObjRefImpl.setObjRef(oref);
         externalObjRefImpl.setPubSubHost(server);

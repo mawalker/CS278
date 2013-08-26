@@ -12,6 +12,10 @@ public interface ExternalObjRef {
 
     public String getPubSubHost();
 
+    public void setObjRef(ObjRef objRef);
+
+    public void setPubSubHost(String pubSubHost);
+
     /**
      * The toString() implementation should return a String in the following
      * format:
