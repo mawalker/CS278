@@ -34,13 +34,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Instantiate the Module instance
-        configuration_ = new ModuleImpl<ObjRefExtractor>();
-        // configure the instance to return proper values.
-        configuration_.setComponent(SMSManager.class, new SMSManagerImpl(
-                getApplicationContext()));
-        configuration_.setComponent(ObjRefExtractor.class,
-                new QRCodeObjRefExtractor());
+        configureApplicationModuleSelection();
 
         connect_ = (Button) findViewById(R.id.connect);
         scan_ = (Button) findViewById(R.id.scan);
@@ -105,5 +99,15 @@ public class MainActivity extends Activity {
                 // Handle cancel
             }
         }
+    }
+
+    private void configureApplicationModuleSelection() {
+        // Instantiate the Module instance
+        configuration_ = ModuleImpl.getInstance();
+        // configure the instance to return proper values.
+        configuration_.setComponent(SMSManager.class, new SMSManagerImpl(
+                getApplicationContext()));
+        configuration_.setComponent(ObjRefExtractor.class,
+                new QRCodeObjRefExtractor());
     }
 }

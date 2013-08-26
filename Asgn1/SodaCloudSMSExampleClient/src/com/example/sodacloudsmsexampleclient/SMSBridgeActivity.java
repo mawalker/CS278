@@ -33,7 +33,7 @@ public class SMSBridgeActivity extends Activity implements AndroidSodaListener {
      * SMSManager --> SMSManagerImpl ObjRefExtractor --> QRCodeObjRefExtractor
      * 
      */
-    private Module configuration_;
+    private Module configuration_ = ModuleImpl.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,8 @@ public class SMSBridgeActivity extends Activity implements AndroidSodaListener {
     @Override
     public void connectionFailure(AndroidSoda s,
             AndroidSodaConnectionException ex) {
-        Toast.makeText(this, "Unable to connect to server.", Toast.LENGTH_LONG);
+        Toast.makeText(this, "Unable to connect to server.", Toast.LENGTH_LONG)
+                .show();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }
