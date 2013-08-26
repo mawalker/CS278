@@ -6,6 +6,7 @@ import org.magnum.soda.android.AndroidSodaConnectionException;
 import org.magnum.soda.android.AndroidSodaListener;
 import org.magnum.soda.example.sms.SMSListener;
 import org.magnum.soda.example.sms.SMSManager;
+import org.magnum.soda.example.sms.SMSManagerImpl;
 import org.magnum.soda.protocol.generic.DefaultProtocol;
 import org.magnum.soda.proxy.ObjRef;
 
@@ -33,7 +34,7 @@ public class SMSBridgeActivity extends Activity implements AndroidSodaListener {
      * SMSManager --> SMSManagerImpl ObjRefExtractor --> QRCodeObjRefExtractor
      * 
      */
-    private Module configuration_ = ModuleImpl.getInstance();
+    private Module configuration_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +43,19 @@ public class SMSBridgeActivity extends Activity implements AndroidSodaListener {
 
         status_ = (TextView) findViewById(R.id.status);
 
+        // Instantiate the Module instance
+        configuration_ = new ModuleImpl<SMSManager>();
+        // configure the instance to return proper values.
+        configuration_.setComponent(SMSManager.class, new SMSManagerImpl(
+                getApplicationContext()));
+        configuration_.setComponent(ObjRefExtractor.class,
+                new QRCodeObjRefExtractor());
+
         String ref = getIntent().getStringExtra("ref");
         String server = ref.substring(0, ref.indexOf("|"));
         objRef_ = ref.substring(ref.indexOf("|") + 1);
 
+        System.out.println(" CONNECT TO SERVER: " + server);
         AndroidSoda.init(this, new DefaultProtocol(), server, "/sms/", 8081,
                 this);
     }
@@ -60,7 +70,6 @@ public class SMSBridgeActivity extends Activity implements AndroidSodaListener {
                 status_.setText("Connected.");
             }
         });
-
         smsManager_ = configuration_.getComponent(SMSManager.class);
 
         ObjRef ref = ObjRef.fromObjUri(objRef_);

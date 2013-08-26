@@ -2,6 +2,8 @@ package com.example.sodacloudsmsexampleclient;
 
 import org.magnum.soda.proxy.ObjRef;
 
+import android.util.Log;
+
 public class ExternalObjRefImpl implements ExternalObjRef {
 
     ObjRef objRef;
@@ -10,16 +12,19 @@ public class ExternalObjRefImpl implements ExternalObjRef {
     @Override
     public ObjRef getObjRef() {
         // TODO Auto-generated method stub
-        return null;
+        return objRef;
     }
 
     @Override
     public String getPubSubHost() {
         // TODO Auto-generated method stub
-        return null;
+        return pubSubHost;
     }
 
     public void setObjRef(ObjRef objRef) {
+        Log.d("OBJ IMPL", "objref =" + objRef);
+        Log.d("OBJ IMPL", "objref =" + objRef.getHost());
+        Log.d("OBJ IMPL", "objref =" + objRef.getUri());
         this.objRef = objRef;
     }
 

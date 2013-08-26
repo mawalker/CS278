@@ -90,6 +90,7 @@ public class SMSManagerImpl implements SMSManager, SMSSender {
     @Override
     public void addListener(SMSListener l) {
         listeners.add(l);
+        l.smsSenderAdded(this);
     }
 
     @Override
@@ -98,6 +99,10 @@ public class SMSManagerImpl implements SMSManager, SMSSender {
     }
 
     public void received(SMS sms) {
+        Log.d(LOG_TAG, "SMS Recieved   >>START<<");
+        Log.v(LOG_TAG, "SMS : " + sms.toString());
+        Log.v(LOG_TAG, "SMS Recieved    >>END<<");
+
         // get new SMS event
         SMSEvent newEvent = new SMSEvent();
         // set relevant data
@@ -106,6 +111,7 @@ public class SMSManagerImpl implements SMSManager, SMSSender {
         // notify each listener currently attached
         for (SMSListener listener : listeners) {
             // notify listener
+            Log.d(LOG_TAG,"notified a listener");
             listener.smsEvent(newEvent);
         }
     }
@@ -117,6 +123,7 @@ public class SMSManagerImpl implements SMSManager, SMSSender {
      * 
      */
 
+    @SodaAsync
     public void sendSMS(SMS sms) {
         SmsManager mgr = SmsManager.getDefault();
         mgr.sendTextMessage(sms.getTo(), null, sms.getContent(), null, null);
@@ -125,6 +132,7 @@ public class SMSManagerImpl implements SMSManager, SMSSender {
     @SodaAsync
     @Override
     public void send(String to, String msg) {
+
         // make a new SMS object
         SMS sms = new SMS();
         // assign values

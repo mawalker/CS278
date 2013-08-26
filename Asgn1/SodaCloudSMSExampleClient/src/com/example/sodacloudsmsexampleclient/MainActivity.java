@@ -6,6 +6,7 @@ import org.magnum.soda.example.sms.SMSManagerImpl;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -34,12 +35,22 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        configureApplicationModuleSelection();
+        // Instantiate the Module instance
+        configuration_ = new ModuleImpl<ObjRefExtractor>();
+        // configure the instance to return proper values.
+        configuration_.setComponent(SMSManager.class, new SMSManagerImpl(
+                getApplicationContext()));
+        configuration_.setComponent(ObjRefExtractor.class,
+                new QRCodeObjRefExtractor());
 
         connect_ = (Button) findViewById(R.id.connect);
         scan_ = (Button) findViewById(R.id.scan);
         objRef_ = (EditText) findViewById(R.id.objRef);
         server_ = (EditText) findViewById(R.id.server);
+
+        // Testing Function, makes it a LOT easier to test
+        // connection w/o camera on remote physical device
+        // setTestSettings();
 
         connect_.setOnClickListener(new View.OnClickListener() {
 
@@ -62,6 +73,11 @@ public class MainActivity extends Activity {
         });
     }
 
+    private void setTestSettings() {
+        server_.setText("192.168.1.4");
+        objRef_.setText("soda://544c4fe2-8ed9-47bf-8830-4a59f1c1b18c#33833f5f-bfae-4bbb-bc8a-7b2cee9d2a2b");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -73,6 +89,14 @@ public class MainActivity extends Activity {
         Toast.makeText(this, "Connecting to: " + server + "...",
                 Toast.LENGTH_LONG).show();
 
+        if ((server == null) || (oref == null)) {
+            Log.w("MAINACTIVITY", "ref was null");
+        } else {
+            Log.w("MAINACTIVITY", "ref pub sub host :" + server);
+            Log.w("MAINACTIVITY", "ref pub sub host :" + oref);
+        }
+
+        Log.d("MAIN", "");
         Intent i = new Intent(this, SMSBridgeActivity.class);
         i.putExtra("ref", server + "|" + oref);
         startActivity(i);
@@ -91,6 +115,9 @@ public class MainActivity extends Activity {
 
                 ObjRefExtractor extractor = configuration_
                         .getComponent(ObjRefExtractor.class);
+                if (extractor == null) {
+                    Log.w("MAIN ACTIVITY", "Extractor was null");
+                }
                 ExternalObjRef ref = extractor.extract(contents);
 
                 connect(ref.getPubSubHost(), ref.getObjRef().getUri());
@@ -99,15 +126,5 @@ public class MainActivity extends Activity {
                 // Handle cancel
             }
         }
-    }
-
-    private void configureApplicationModuleSelection() {
-        // Instantiate the Module instance
-        configuration_ = ModuleImpl.getInstance();
-        // configure the instance to return proper values.
-        configuration_.setComponent(SMSManager.class, new SMSManagerImpl(
-                getApplicationContext()));
-        configuration_.setComponent(ObjRefExtractor.class,
-                new QRCodeObjRefExtractor());
     }
 }
