@@ -1,12 +1,8 @@
 package com.example.sodacloudsmsexampleclient;
 
-import org.magnum.soda.example.sms.SMSManager;
-import org.magnum.soda.example.sms.SMSManagerImpl;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+
+    // constants for launching the barcode scanner
+    private static final String SCAN_MODE = "SCAN_MODE";
+    private static final String QR_CODE_MODE = "QR_CODE_MODE";
+    private static final String SCANNER_CLIENT = "com.google.zxing.client.android.SCAN";
 
     private Button connect_;
     private Button scan_;
@@ -28,30 +29,24 @@ public class MainActivity extends Activity {
      * SMSManager --> SMSManagerImpl ObjRefExtractor --> QRCodeObjRefExtractor
      * 
      */
-    private Module configuration_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ModuleConfiguration.setContext(getApplicationContext());
+        setupUI();
+
+    }
+
+    private void setupUI() {
+
         setContentView(R.layout.activity_main);
 
-        // Instantiate the Module instance
-        configuration_ = new ModuleImpl<ObjRefExtractor>();
-        // configure the instance to return proper values.
-        configuration_.setComponent(SMSManager.class, new SMSManagerImpl(
-                getApplicationContext()));
-        configuration_.setComponent(ObjRefExtractor.class,
-                new QRCodeObjRefExtractor());
-
-        connect_ = (Button) findViewById(R.id.connect);
-        scan_ = (Button) findViewById(R.id.scan);
         objRef_ = (EditText) findViewById(R.id.objRef);
         server_ = (EditText) findViewById(R.id.server);
 
-        // Testing Function, makes it a LOT easier to test
-        // connection w/o camera on remote physical device
-        // setTestSettings();
-
+        connect_ = (Button) findViewById(R.id.connect);
         connect_.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -64,6 +59,7 @@ public class MainActivity extends Activity {
             }
         });
 
+        scan_ = (Button) findViewById(R.id.scan);
         scan_.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -71,11 +67,6 @@ public class MainActivity extends Activity {
                 initiateScan();
             }
         });
-    }
-
-    private void setTestSettings() {
-        server_.setText("192.168.1.4");
-        objRef_.setText("soda://544c4fe2-8ed9-47bf-8830-4a59f1c1b18c#33833f5f-bfae-4bbb-bc8a-7b2cee9d2a2b");
     }
 
     @Override
@@ -86,45 +77,51 @@ public class MainActivity extends Activity {
     }
 
     public void connect(String server, String oref) {
-        Toast.makeText(this, "Connecting to: " + server + "...",
-                Toast.LENGTH_LONG).show();
-
-        if ((server == null) || (oref == null)) {
-            Log.w("MAINACTIVITY", "ref was null");
-        } else {
-            Log.w("MAINACTIVITY", "ref pub sub host :" + server);
-            Log.w("MAINACTIVITY", "ref pub sub host :" + oref);
-        }
-
-        Log.d("MAIN", "");
-        Intent i = new Intent(this, SMSBridgeActivity.class);
-        i.putExtra("ref", server + "|" + oref);
+        makeLongToast("Connecting to: " + server + "...");
+        Intent i = getConnectIntent(server, oref);
         startActivity(i);
     }
 
+    private Intent getConnectIntent(String server, String oref) {
+        Intent i = new Intent(this, SMSBridgeActivity.class);
+        i.putExtra("ref", server + "|" + oref);
+        return i;
+    }
+
+    private Intent getScanIntent() {
+        Intent intent = new Intent(SCANNER_CLIENT);
+        intent.putExtra(SCAN_MODE, QR_CODE_MODE);
+        return intent;
+    }
+
     public void initiateScan() {
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+        Intent intent = getScanIntent();
         startActivityForResult(intent, 0);
+    }
+
+    private void makeLongToast(String value) {
+        Toast.makeText(this, value, Toast.LENGTH_LONG).show();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
 
-                ObjRefExtractor extractor = configuration_
-                        .getComponent(ObjRefExtractor.class);
-                if (extractor == null) {
-                    Log.w("MAIN ACTIVITY", "Extractor was null");
-                }
-                ExternalObjRef ref = extractor.extract(contents);
-
+                ExternalObjRef ref = getExternalObjRefFromIntent(intent);
                 connect(ref.getPubSubHost(), ref.getObjRef().getUri());
 
             } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
+                makeLongToast("BarCode Scanner Canceled.");
             }
         }
+    }
+
+    private ExternalObjRef getExternalObjRefFromIntent(Intent intent) {
+        String contents = intent.getStringExtra("SCAN_RESULT");
+
+        ObjRefExtractor extractor = new ModuleImpl<ObjRefExtractor>()
+                .getComponent(ObjRefExtractor.class);
+
+        return extractor.extract(contents);
     }
 }
