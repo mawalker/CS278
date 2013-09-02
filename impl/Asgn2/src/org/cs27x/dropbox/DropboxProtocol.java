@@ -1,24 +1,31 @@
 package org.cs27x.dropbox;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.commons.io.IOUtils;
 import org.cs27x.dropbox.DropboxCmd.OpCode;
+import org.cs27x.dropbox.interfaces.FileModifierInterface;
 import org.cs27x.filewatcher.FileStates;
 
 public class DropboxProtocol {
 
 	private final DropboxTransport transport_;
-	
+	FileModifierInterface fileModifier_ = new FileModifier();
 	private final DropboxCmdProcessor cmdProcessor_;
 
-	public DropboxProtocol(DropboxTransport transport, FileStates states, FileManager filemgr) {
+	public DropboxProtocol(DropboxTransport transport, FileStates states,
+			FileManager filemgr) {
 		transport_ = transport;
-		cmdProcessor_ = new DropboxCmdProcessor(states,filemgr);
+		cmdProcessor_ = new DropboxCmdProcessor(states, filemgr);
 		transport_.addListener(cmdProcessor_);
+	}
+
+	public DropboxProtocol(DropboxTransport transport,
+			DropboxCmdProcessor cmdProcessor, FileModifierInterface fileModifier) {
+		transport_ = transport;
+		cmdProcessor_ = cmdProcessor;
+		transport_.addListener(cmdProcessor_);
+		fileModifier_ = fileModifier;
 	}
 
 	public void connect(String initialPeer) {
@@ -33,19 +40,16 @@ public class DropboxProtocol {
 		DropboxCmd cmd = new DropboxCmd();
 		cmd.setOpCode(OpCode.ADD);
 		cmd.setPath(p.getFileName().toString());
-
 		try {
-
-			try (InputStream in = Files.newInputStream(p)) {
-				byte[] data = IOUtils.toByteArray(in);
-				cmd.setData(data);
-			}
-
+			cmd.setData(getFileData(p));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		publish(cmd);
+	}
+
+	public byte[] getFileData(Path p) throws IOException {
+		return fileModifier_.getFileData(p);
 	}
 
 	public void removeFile(Path p) {
@@ -60,18 +64,11 @@ public class DropboxProtocol {
 		cmd.setOpCode(OpCode.UPDATE);
 		cmd.setPath(p.getFileName().toString());
 		try {
-
-			try (InputStream in = Files.newInputStream(p)) {
-				byte[] data = IOUtils.toByteArray(in);
-				cmd.setData(data);
-			}
-
+			cmd.setData(getFileData(p));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		publish(cmd);
 	}
-
 
 }

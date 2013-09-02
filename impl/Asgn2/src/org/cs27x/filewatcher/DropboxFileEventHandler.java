@@ -30,21 +30,18 @@ public class DropboxFileEventHandler implements FileEventHandler {
 		evt = new FileEvent(evt.getEventType(), p);
 
 		try {
-			evt = fileStates_.filter(evt);
-
-			if (evt != null) {
-
-				if (evt.getEventType() == ENTRY_CREATE) {
-					transport_.addFile(evt.getFile());
-				} else if (evt.getEventType() == ENTRY_MODIFY) {
-					transport_.updateFile(evt.getFile());
-				} else if (evt.getEventType() == ENTRY_DELETE) {
-					transport_.removeFile(evt.getFile());
+			FileEvent evt2 = fileStates_.filter(evt);
+			if (evt2 != null) {
+				if (evt2.getEventType() == ENTRY_CREATE) {
+					transport_.addFile(evt2.getFile());
+				} else if (evt2.getEventType() == ENTRY_MODIFY) {
+					transport_.updateFile(evt2.getFile());
+				} else if (evt2.getEventType() == ENTRY_DELETE) {
+					transport_.removeFile(evt2.getFile());
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

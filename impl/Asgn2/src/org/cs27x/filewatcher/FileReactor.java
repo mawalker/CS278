@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
+import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class FileReactor {
 			try {
 
 				key = watcher.take();
-				
+
 			} catch (InterruptedException x) {
 				return;
 			}
@@ -118,7 +119,7 @@ public class FileReactor {
 			Path child = toWatch_.resolve(filename);
 
 			try {
-				FileEvent evt = new FileEvent(kind, child);
+				FileEvent evt = new FileEvent((Kind<Path>) kind, child);
 				dispatch(evt);
 			} catch (Exception e) {
 				e.printStackTrace();

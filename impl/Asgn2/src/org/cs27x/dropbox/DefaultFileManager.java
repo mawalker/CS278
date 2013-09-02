@@ -1,37 +1,42 @@
 package org.cs27x.dropbox;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
+
+import org.cs27x.dropbox.interfaces.FileModifierInterface;
 
 public class DefaultFileManager implements FileManager {
 
 	private final Path rootDir_;
-	
-	public DefaultFileManager(Path rootdir){
+	private FileModifierInterface fileAccess = new FileModifier();
+
+	public DefaultFileManager(Path rootdir) {
 		rootDir_ = rootdir;
 	}
-	
-	@Override
-	public boolean exists(Path p){
-		return Files.exists(p);
+
+	public DefaultFileManager(Path rootdir, FileModifierInterface fileModifier) {
+		rootDir_ = rootdir;
+		fileAccess = fileModifier;
 	}
-	
+
 	@Override
-	public void write(Path p, byte[] data, boolean overwrite) throws IOException{
-		
-		if (!Files.exists(p) || overwrite) {
-			try (OutputStream out = Files.newOutputStream(p)) {
-				out.write(data);
-			}
+	public boolean exists(Path p) {
+		return fileAccess.doesFileExist(p);
+	}
+
+	@Override
+	public void write(Path p, byte[] data, boolean overwrite)
+			throws IOException {
+
+		if (!exists(p) || overwrite) {
+			fileAccess.writeOut(p, data);
 		}
 	}
-	
+
 	@Override
 	public void delete(Path p) throws IOException {
-		if(Files.exists(p)){
-			Files.delete(p);
+		if (exists(p)) {
+			fileAccess.deleteFile(p);
 		}
 	}
 
@@ -39,5 +44,5 @@ public class DefaultFileManager implements FileManager {
 	public Path resolve(String relativePathName) {
 		return rootDir_.resolve(relativePathName);
 	}
-	
+
 }

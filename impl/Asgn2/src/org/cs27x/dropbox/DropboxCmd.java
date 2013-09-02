@@ -1,6 +1,7 @@
 package org.cs27x.dropbox;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class DropboxCmd implements Serializable {
 
@@ -8,12 +9,13 @@ public class DropboxCmd implements Serializable {
 
 	public enum OpCode {
 		ADD, REMOVE, UPDATE, SYNC, GET
+
 	}
 
-	private String from_;
-	private String path_;
-	private byte[] data_;
-	private OpCode opCode_;
+	private String from_ = "";
+	private String path_ = "";
+	private byte[] data_ = "".getBytes();
+	private OpCode opCode_ = OpCode.ADD;
 
 	public String getFrom() {
 		return from_;
@@ -45,6 +47,30 @@ public class DropboxCmd implements Serializable {
 
 	public void setOpCode(OpCode opCode) {
 		opCode_ = opCode;
+	}
+
+	// implmented equals to make testing easier
+	@Override
+	public boolean equals(Object aThat) {
+		if (this == aThat)
+			return true;
+		if (!(aThat instanceof DropboxCmd))
+			return false;
+		DropboxCmd that = (DropboxCmd) aThat;
+		if (Arrays.equals(this.data_, that.data_) == false) {
+			return false;
+		}
+		// if ((this.from_ != null) && (that.from_ != null))
+		if (this.from_.equals(that.from_) == false) {
+			return false;
+		}
+		if (this.path_.equals(that.path_) == false) {
+			return false;
+		}
+		if (this.opCode_ != that.opCode_) {
+			return false;
+		}
+		return true;
 	}
 
 }
