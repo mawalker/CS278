@@ -1,0 +1,45 @@
+exec { "apt-get update":
+  path => "/usr/bin",
+}
+
+package { "vim":
+  ensure  => present,
+  require => Exec["apt-get update"],
+}
+
+package { "nano":
+  ensure  => present,
+  require => Exec["apt-get update"],
+}
+
+package { "zip":
+  ensure  => present,
+  require => Exec["apt-get update"],
+}
+
+package { "curl":
+  ensure  => present,
+  require => Exec["apt-get update"],
+}
+
+package { "openjdk-7-jre-headless":
+  ensure  => present,
+  require => Exec["apt-get update"],
+}
+
+#service { "nginx":
+#  ensure  => present,
+#  require => Package["zip"],
+#}
+
+#file { '/etc/motd':
+#  source => 'puppet:///vagrant/motd',
+#  owner  => 'root',
+#  group  => 'root',
+#  mode   =>  777,
+#}
+
+#exec { "launchLogstash":
+#    command => "nohup java -jar logstash/logstash-1.2.1-flatjar.jar agent -f logstash-simple.conf -- web > /dev/null 2>&1 &",
+#    cwd => "/vagrant/", user => "vagrant", path => "/usr/bin/:/bin/", logoutput => true,
+#}
