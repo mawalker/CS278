@@ -1,6 +1,9 @@
 Assignment 5
 
-Family GPS application.
+Family GPS application. (Allows you to push your GPS location to the server, and then recieve a set of other people's GPS locations.
+
+<b>NOTE</b>: Currently an issue with SodaCloud Framework and Android Integration testing,
+ I'm continuing to work on this bug before I can show that both work at the same time.
 
 
 | File(s)        | Description | 
@@ -35,7 +38,14 @@ This command will do the following:
   1. Build the Server Applicatoin
   2. Run the jUnit tests
 
+
 ```bash
 vagrant up
 ```
 This command will start the vagrant configured VM and start the Java Server on it.
+
+
+```bash
+cd cd family-gps-locations; mvn android:deploy
+```
+will install the application to a connected device.
