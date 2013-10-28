@@ -10,8 +10,8 @@
 	<modules>
         <module>family-gps-locations-common</module>	  
 		<module>family-gps-locations</module>
-		<module>family-gps-locations-it</module>
         <module>gpsServer</module>
+		<module>family-gps-locations-it</module>
     </modules>
 
 	<properties>
