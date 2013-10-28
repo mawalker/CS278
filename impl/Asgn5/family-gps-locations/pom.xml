@@ -14,8 +14,7 @@
         </modules>
 
 	<properties>
-		<platform.version> 4.1.1.4
-					</platform.version>
+		<platform.version> 4.1.1.4</platform.version>
 		<android.plugin.version>3.6.0</android.plugin.version>
 	</properties>
 
@@ -53,7 +52,7 @@
 						<sdk>
 							<platform>16</platform>
 						</sdk> 
-											</configuration>
+					</configuration>
 				</plugin>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>

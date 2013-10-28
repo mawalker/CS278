@@ -5,5 +5,14 @@
     <string name="hello">Hello family-gps-locations!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="main_button_push_location">Push My Location to Server</string>
+    <string name="main_button_get_location">Get Locations of Others</string>
+    <string name="main_text_view_my_name_label">My Name:</string>
+    <string name="gps_row_name_label">Person:</string>
+    <string name="gps_row_lat_label">lat:</string>
+    <string name="gps_row_long_label">lon:</string>
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="my_lat_label">My Lat:</string>
+    <string name="my_long_label">My Lon:</string>
+    
 </resources>
