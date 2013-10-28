@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.util.Log;
-import android.widget.Toast;
 
 public class LocatorImpl implements Locator {
 
@@ -26,7 +25,7 @@ public class LocatorImpl implements Locator {
 		}
 		String providerName = locationManager.getBestProvider(criteria, true);
 
-		if (providerName != null || !providerName.equals("")) {
+		if (providerName != null && !providerName.equals("")) {
 			LocationProvider provider = locationManager
 					.getProvider(providerName);
 			if (provider != null) {
@@ -34,8 +33,6 @@ public class LocatorImpl implements Locator {
 
 			}
 		}
-		Toast.makeText(context, "Sorry GPS Location is unavailable/Turned off",
-				Toast.LENGTH_SHORT).show();
 		return null;
 	}
 }

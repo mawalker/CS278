@@ -5,13 +5,14 @@
 	<artifactId>family-gps-locations-parent</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>family-gps-locations - Parent</name>
+	<name>family-gps-locations    - Parent</name>
 
 	<modules>
+        <module>family-gps-locations-common</module>	  
 		<module>family-gps-locations</module>
 		<module>family-gps-locations-it</module>
-                <module>gpsServer</module>
-        </modules>
+        <module>gpsServer</module>
+    </modules>
 
 	<properties>
 		<platform.version> 4.1.1.4</platform.version>

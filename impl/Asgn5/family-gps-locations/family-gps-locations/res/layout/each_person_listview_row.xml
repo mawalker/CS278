@@ -9,14 +9,14 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/personLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gps_row_name_label"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/person"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -26,14 +26,14 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/latLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gps_row_lat_label"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/lat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -43,14 +43,14 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/lonLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gps_row_long_label"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/lon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
