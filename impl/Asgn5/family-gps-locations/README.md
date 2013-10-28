@@ -46,6 +46,6 @@ This command will start the vagrant configured VM and start the Java Server on i
 
 
 ```bash
-cd cd family-gps-locations; mvn android:deploy
+cd family-gps-locations; mvn android:deploy
 ```
 will install the application to a connected device.
