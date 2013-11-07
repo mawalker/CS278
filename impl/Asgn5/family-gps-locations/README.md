@@ -10,6 +10,7 @@ Family GPS application. (Allows you to push your GPS location to the server, and
 | ------------- |:-------------:|
 | README.md   | This File | 
 | pom.xml   | Maven Parent POM File |
+| family-gps-locations-common/ | Common Files for both Android & Server |
 | family-gps-locations/  | The Android Application |
 | family-gps-locations-it/ | The Android Application Integration Tests |
 | gpsServer/ | The Java Server |
@@ -46,6 +47,6 @@ This command will start the vagrant configured VM and start the Java Server on i
 
 
 ```bash
-cd cd family-gps-locations; mvn android:deploy
+cd family-gps-locations; mvn android:deploy
 ```
 will install the application to a connected device.
